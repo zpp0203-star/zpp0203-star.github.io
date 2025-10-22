@@ -1,10 +1,944 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>我的第一个页面</title>
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Void Echo | Independent Musician</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Inter:wght@300;400;500;600;700&amp;family=Montserrat:wght@200;300;400;500;600&amp;display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF0066', // 霓虹粉
+                        secondary: '#00FFFF', // 霓虹蓝
+                        dark: '#121212', // 深黑色
+                        light: '#F8F8F8', // 亮白色
+                        neutral: '#333333', // 中性灰
+                        'neutral-light': '#666666', // 浅灰
+                    },
+                    fontFamily: {
+                        bebas: ['Bebas Neue', 'sans-serif'],
+                        inter: ['Inter', 'sans-serif'],
+                        montserrat: ['Montserrat', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'noise': "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')",
+                    }
+                },
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 0 8px currentColor;
+            }
+            .neon-border {
+                box-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
+            }
+            .tape-texture {
+                background-image: repeating-linear-gradient(
+                    45deg,
+                    rgba(0,0,0,0.05),
+                    rgba(0,0,0,0.05) 1px,
+                    transparent 1px,
+                    transparent 10px
+                );
+            }
+            .graffiti-font {
+                font-family: 'Impact', sans-serif;
+                transform: rotate(-2deg);
+            }
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+            .scrollbar-hide {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+            .record-spin {
+                animation: spin 20s linear infinite;
+            }
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+            .hover-scale {
+                transition: transform 0.3s ease;
+            }
+            .hover-scale:hover {
+                transform: scale(1.05);
+            }
+            .bg-blur {
+                backdrop-filter: blur(8px);
+            }
+        }
+    </style>
 </head>
-<body>
-    <h1>Hello, GitHub Pages!</h1>
-    <p>这是通过GitHub Pages发布的网页</p >
-</body>
-</html>
+<body class="bg-dark text-light font-inter antialiased overflow-x-hidden">
+    <!-- Noise texture overlay -->
+    <div class="fixed inset-0 opacity-10 pointer-events-none bg-noise z-50"></div>
+
+    <!-- Navigation -->
+    <nav id="main-nav" class="fixed w-full top-0 z-40 transition-all duration-300">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center bg-dark/80 backdrop-blur-md">
+            <a href="#" class="text-2xl md:text-3xl font-bebas text-primary text-shadow tracking-wider">VOID ECHO</a>
+            
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#home" class="text-light hover:text-primary transition-colors duration-300">Home</a>
+                <a href="#music" class="text-light hover:text-primary transition-colors duration-300">Music</a>
+                <a href="#shows" class="text-light hover:text-primary transition-colors duration-300">Shows</a>
+                <a href="#behind" class="text-light hover:text-primary transition-colors duration-300">Behind The Scenes</a>
+                <a href="#store" class="text-light hover:text-primary transition-colors duration-300">Store</a>
+                <a href="#contact" class="text-light hover:text-primary transition-colors duration-300">Contact</a>
+            </div>
+            
+            <!-- Mobile Navigation Toggle -->
+            <button id="menu-toggle" class="md:hidden text-light text-2xl focus:outline-none">
+                <i class="fa fa-bars"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-dark/95 backdrop-blur-md">
+            <div class="container mx-auto px-4 py-4 flex flex-col space-y-4">
+                <a href="#home" class="text-light hover:text-primary transition-colors duration-300 py-2">Home</a>
+                <a href="#music" class="text-light hover:text-primary transition-colors duration-300 py-2">Music</a>
+                <a href="#shows" class="text-light hover:text-primary transition-colors duration-300 py-2">Shows</a>
+                <a href="#behind" class="text-light hover:text-primary transition-colors duration-300 py-2">Behind The Scenes</a>
+                <a href="#store" class="text-light hover:text-primary transition-colors duration-300 py-2">Store</a>
+                <a href="#contact" class="text-light hover:text-primary transition-colors duration-300 py-2">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden">
+        <!-- Background Visual -->
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-gradient-to-b from-dark/80 to-dark z-10"></div>
+            <img src="https://p3-search.byteimg.com/obj/labis/56d2a4ff05bd0c3d30699a4b440c5503" alt="Artist performing on stage with neon lights" class="w-full h-full object-cover object-center">
+        </div>
+        
+        <!-- Hero Content -->
+        <div class="container mx-auto px-4 z-10 text-center">
+            <h1 class="text-[clamp(3rem,10vw,6rem)] font-bebas mb-4 text-primary text-shadow leading-none">
+                VOID ECHO
+            </h1>
+            <p class="text-[clamp(1rem,3vw,1.5rem)] font-montserrat text-light/90 mb-8 max-w-3xl mx-auto">
+                Independent Musician &amp; Producer
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mb-12">
+                <a href="#music" class="px-8 py-3 bg-primary text-dark font-bold rounded-full hover:bg-primary/80 transition-all duration-300 transform hover:-translate-y-1 neon-border">
+                    Listen Now
+                </a>
+                <a href="#shows" class="px-8 py-3 bg-transparent border-2 border-secondary text-secondary font-bold rounded-full hover:bg-secondary/20 transition-all duration-300 transform hover:-translate-y-1">
+                    Upcoming Shows
+                </a>
+            </div>
+            
+            <!-- Social Links -->
+            <div class="flex justify-center space-x-6">
+                <a href="#" class="text-light hover:text-primary transition-colors duration-300 text-2xl">
+                    <i class="fa fa-instagram"></i>
+                </a>
+                <a href="#" class="text-light hover:text-primary transition-colors duration-300 text-2xl">
+                    <i class="fa fa-twitter"></i>
+                </a>
+                <a href="#" class="text-light hover:text-primary transition-colors duration-300 text-2xl">
+                    <i class="fa fa-facebook"></i>
+                </a>
+                <a href="#" class="text-light hover:text-primary transition-colors duration-300 text-2xl">
+                    <i class="fa fa-youtube-play"></i>
+                </a>
+                <a href="#" class="text-light hover:text-primary transition-colors duration-300 text-2xl">
+                    <i class="fa fa-spotify"></i>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <a href="#music" class="text-light/70 hover:text-primary transition-colors duration-300">
+                <i class="fa fa-angle-down text-3xl"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Music Section -->
+    <section id="music" class="py-24 relative bg-dark tape-texture">
+        <div class="container mx-auto px-4">
+            <h2 class="text-[clamp(2rem,5vw,3.5rem)] font-bebas mb-12 text-center text-secondary text-shadow">
+                Latest Releases
+            </h2>
+            
+            <!-- Featured Album -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-20">
+                <div class="relative">
+                    <div class="absolute inset-0 bg-primary/20 rounded-lg transform rotate-3"></div>
+                    <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/8cc75f6e926c4ab493ccef093284e40f~tplv-a9rns2rl98-image.image?rk3s=8e244e95&amp;rrcfp=2609e108&amp;x-expires=1751290103&amp;x-signature=zcag%2BPL%2BwBaloCNCGEIqeFX6TxM%3D" alt="Album cover for 'Neon Dreams'" class="relative z-10 rounded-lg hover-scale shadow-2xl">
+                    <div class="absolute -bottom-5 -right-5 bg-dark border-2 border-primary rounded-full w-16 h-16 flex items-center justify-center z-20 neon-border">
+                        <i class="fa fa-play text-primary text-xl"></i>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-3xl font-bebas mb-2 text-primary">Neon Dreams</h3>
+                    <p class="text-neutral-light mb-6">Released: June 15, 2025</p>
+                    <p class="mb-6 text-light/80 leading-relaxed">
+                        A collection of dreamy synth-pop tracks exploring nocturnal landscapes and urban solitude. Each song captures the feeling of wandering city streets under neon lights, blending electronic beats with organic instrumentation.
+                    </p>
+                    
+                    <!-- Tracklist -->
+                    <div class="mb-8">
+                        <h4 class="text-xl font-semibold mb-3 text-secondary">Tracklist</h4>
+                        <ul class="space-y-2">
+                            <li class="flex justify-between items-center py-2 border-b border-neutral-light/20">
+                                <span>1. City Glow</span>
+                                <span class="text-primary"><i class="fa fa-play"></i> 3:45</span>
+                            </li>
+                            <li class="flex justify-between items-center py-2 border-b border-neutral-light/20">
+                                <span>2. Lost Signal</span>
+                                <span class="text-primary"><i class="fa fa-play"></i> 4:12</span>
+                            </li>
+                            <li class="flex justify-between items-center py-2 border-b border-neutral-light/20">
+                                <span>3. Echo Chamber</span>
+                                <span class="text-primary"><i class="fa fa-play"></i> 5:03</span>
+                            </li>
+                            <li class="flex justify-between items-center py-2 border-b border-neutral-light/20">
+                                <span>4. Digital Rain</span>
+                                <span class="text-primary"><i class="fa fa-play"></i> 3:58</span>
+                            </li>
+                            <li class="flex justify-between items-center py-2 border-b border-neutral-light/20">
+                                <span>5. Nightdrive</span>
+                                <span class="text-primary"><i class="fa fa-play"></i> 4:30</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Streaming Links -->
+                    <div class="flex flex-wrap gap-3">
+                        <a href="#" class="px-4 py-2 bg-neutral rounded-full text-light hover:bg-primary hover:text-dark transition-colors duration-300">
+                            <i class="fa fa-spotify mr-2"></i> Spotify
+                        </a>
+                        <a href="#" class="px-4 py-2 bg-neutral rounded-full text-light hover:bg-primary hover:text-dark transition-colors duration-300">
+                            <i class="fa fa-apple mr-2"></i> Apple Music
+                        </a>
+                        <a href="#" class="px-4 py-2 bg-neutral rounded-full text-light hover:bg-primary hover:text-dark transition-colors duration-300">
+                            <i class="fa fa-amazon mr-2"></i> Amazon Music
+                        </a>
+                        <a href="#" class="px-4 py-2 bg-neutral rounded-full text-light hover:bg-primary hover:text-dark transition-colors duration-300">
+                            <i class="fa fa-soundcloud mr-2"></i> SoundCloud
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Other Albums -->
+            <h3 class="text-2xl font-bebas mb-8 text-center text-secondary">Other Albums</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Album 1 -->
+                <div class="bg-neutral/20 rounded-lg overflow-hidden hover-scale">
+                    <div class="relative">
+                        <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/2633980d9198477fb245c5adc5fff110~tplv-a9rns2rl98-image.image?rk3s=8e244e95&amp;rrcfp=2609e108&amp;x-expires=1751290067&amp;x-signature=O9e9bjB9t6dkif%2BjEbXm50BI2hI%3D" alt="Album cover for 'Midnight Echoes'" class="w-full aspect-square object-cover">
+                        <div class="absolute inset-0 bg-primary/0 hover:bg-primary/30 transition-colors duration-300 flex items-center justify-center opacity-0 hover:opacity-100">
+                            <button class="w-14 h-14 rounded-full bg-dark border-2 border-primary flex items-center justify-center">
+                                <i class="fa fa-play text-primary text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h4 class="text-xl font-bebas mb-1 text-primary">Midnight Echoes</h4>
+                        <p class="text-neutral-light mb-3">Released: December 8, 2024</p>
+                        <a href="#" class="text-secondary hover:text-primary transition-colors duration-300 inline-flex items-center">
+                            Listen Now <i class="fa fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Album 2 -->
+                <div class="bg-neutral/20 rounded-lg overflow-hidden hover-scale">
+                    <div class="relative">
+                        <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/ea30e05ab4c04bea8fc178a53bd2488a~tplv-a9rns2rl98-image.image?rk3s=8e244e95&amp;rrcfp=2609e108&amp;x-expires=1751290026&amp;x-signature=VUX5i0cXx8fjOyOgr%2Bh8oQCFl7Q%3D" alt="Album cover for 'Synthetic Soul'" class="w-full aspect-square object-cover">
+                        <div class="absolute inset-0 bg-primary/0 hover:bg-primary/30 transition-colors duration-300 flex items-center justify-center opacity-0 hover:opacity-100">
+                            <button class="w-14 h-14 rounded-full bg-dark border-2 border-primary flex items-center justify-center">
+                                <i class="fa fa-play text-primary text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h4 class="text-xl font-bebas mb-1 text-primary">Synthetic Soul</h4>
+                        <p class="text-neutral-light mb-3">Released: May 22, 2024</p>
+                        <a href="#" class="text-secondary hover:text-primary transition-colors duration-300 inline-flex items-center">
+                            Listen Now <i class="fa fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Album 3 -->
+                <div class="bg-neutral/20 rounded-lg overflow-hidden hover-scale">
+                    <div class="relative">
+                        <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/807827e6f737429384e27b0870fb1edf~tplv-a9rns2rl98-image.image?rk3s=8e244e95&amp;rrcfp=2609e108&amp;x-expires=1751290048&amp;x-signature=cshNY5a3ZNSN4i4%2F2DC7mBh31rk%3D" alt="Album cover for 'Electric Dreams'" class="w-full aspect-square object-cover">
+                        <div class="absolute inset-0 bg-primary/0 hover:bg-primary/30 transition-colors duration-300 flex items-center justify-center opacity-0 hover:opacity-100">
+                            <button class="w-14 h-14 rounded-full bg-dark border-2 border-primary flex items-center justify-center">
+                                <i class="fa fa-play text-primary text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h4 class="text-xl font-bebas mb-1 text-primary">Electric Dreams</h4>
+                        <p class="text-neutral-light mb-3">Released: October 17, 2023</p>
+                        <a href="#" class="text-secondary hover:text-primary transition-colors duration-300 inline-flex items-center">
+                            Listen Now <i class="fa fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shows Section -->
+    <section id="shows" class="py-24 relative bg-gradient-to-b from-dark to-neutral">
+        <div class="container mx-auto px-4">
+            <h2 class="text-[clamp(2rem,5vw,3.5rem)] font-bebas mb-12 text-center text-primary text-shadow">
+                Upcoming Shows
+            </h2>
+            
+            <!-- Tour Dates -->
+            <div class="max-w-4xl mx-auto">
+                <!-- Show 1 -->
+                <div class="bg-dark/60 backdrop-blur-md rounded-lg p-6 mb-6 hover-scale border border-primary/30">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div>
+                            <h3 class="text-xl font-semibold text-primary mb-1">Neon Dreams Tour</h3>
+                            <p class="text-light/80 mb-2">
+                                <i class="fa fa-calendar mr-2"></i> July 15, 2025
+                                <span class="mx-3">•</span>
+                                <i class="fa fa-map-marker mr-2"></i> The Roxy, Los Angeles, CA
+                            </p>
+                            <p class="text-neutral-light">Doors open at 7:30 PM | Show starts at 8:30 PM</p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <a href="#" class="px-6 py-2 bg-primary text-dark font-bold rounded-full hover:bg-primary/80 transition-all duration-300 neon-border">
+                                Buy Tickets
+                            </a>
+                            <a href="#" class="px-6 py-2 bg-transparent border border-secondary text-secondary rounded-full hover:bg-secondary/20 transition-all duration-300">
+                                Add to Calendar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Show 2 -->
+                <div class="bg-dark/60 backdrop-blur-md rounded-lg p-6 mb-6 hover-scale border border-primary/30">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div>
+                            <h3 class="text-xl font-semibold text-primary mb-1">Neon Dreams Tour</h3>
+                            <p class="text-light/80 mb-2">
+                                <i class="fa fa-calendar mr-2"></i> July 18, 2025
+                                <span class="mx-3">•</span>
+                                <i class="fa fa-map-marker mr-2"></i> The Fillmore, San Francisco, CA
+                            </p>
+                            <p class="text-neutral-light">Doors open at 7:00 PM | Show starts at 8:00 PM</p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <a href="#" class="px-6 py-2 bg-primary text-dark font-bold rounded-full hover:bg-primary/80 transition-all duration-300 neon-border">
+                                Buy Tickets
+                            </a>
+                            <a href="#" class="px-6 py-2 bg-transparent border border-secondary text-secondary rounded-full hover:bg-secondary/20 transition-all duration-300">
+                                Add to Calendar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Show 3 -->
+                <div class="bg-dark/60 backdrop-blur-md rounded-lg p-6 mb-6 hover-scale border border-primary/30">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div>
+                            <h3 class="text-xl font-semibold text-primary mb-1">Neon Dreams Tour</h3>
+                            <p class="text-light/80 mb-2">
+                                <i class="fa fa-calendar mr-2"></i> July 22, 2025
+                                <span class="mx-3">•</span>
+                                <i class="fa fa-map-marker mr-2"></i> The Warfield, Seattle, WA
+                            </p>
+                            <p class="text-neutral-light">Doors open at 7:30 PM | Show starts at 8:30 PM</p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <a href="#" class="px-6 py-2 bg-primary text-dark font-bold rounded-full hover:bg-primary/80 transition-all duration-300 neon-border">
+                                Buy Tickets
+                            </a>
+                            <a href="#" class="px-6 py-2 bg-transparent border border-secondary text-secondary rounded-full hover:bg-secondary/20 transition-all duration-300">
+                                Add to Calendar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Show 4 -->
+                <div class="bg-dark/60 backdrop-blur-md rounded-lg p-6 mb-6 hover-scale border border-primary/30">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div>
+                            <h3 class="text-xl font-semibold text-primary mb-1">Neon Dreams Tour</h3>
+                            <p class="text-light/80 mb-2">
+                                <i class="fa fa-calendar mr-2"></i> July 25, 2025
+                                <span class="mx-3">•</span>
+                                <i class="fa fa-map-marker mr-2"></i> The Vic, Chicago, IL
+                            </p>
+                            <p class="text-neutral-light">Doors open at 7:00 PM | Show starts at 8:00 PM</p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <a href="#" class="px-6 py-2 bg-primary text-dark font-bold rounded-full hover:bg-primary/80 transition-all duration-300 neon-border">
+                                Buy Tickets
+                            </a>
+                            <a href="#" class="px-6 py-2 bg-transparent border border-secondary text-secondary rounded-full hover:bg-secondary/20 transition-all duration-300">
+                                Add to Calendar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Show 5 -->
+                <div class="bg-dark/60 backdrop-blur-md rounded-lg p-6 hover-scale border border-primary/30">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div>
+                            <h3 class="text-xl font-semibold text-primary mb-1">Neon Dreams Tour</h3>
+                            <p class="text-light/80 mb-2">
+                                <i class="fa fa-calendar mr-2"></i> July 29, 2025
+                                <span class="mx-3">•</span>
+                                <i class="fa fa-map-marker mr-2"></i> Terminal 5, New York, NY
+                            </p>
+                            <p class="text-neutral-light">Doors open at 7:30 PM | Show starts at 8:30 PM</p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <a href="#" class="px-6 py-2 bg-primary text-dark font-bold rounded-full hover:bg-primary/80 transition-all duration-300 neon-border">
+                                Buy Tickets
+                            </a>
+                            <a href="#" class="px-6 py-2 bg-transparent border border-secondary text-secondary rounded-full hover:bg-secondary/20 transition-all duration-300">
+                                Add to Calendar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tour Map -->
+            <div class="mt-16 max-w-5xl mx-auto">
+                <h3 class="text-2xl font-bebas mb-6 text-center text-secondary">Tour Map</h3>
+                <div class="bg-dark/40 p-4 rounded-lg border border-neutral-light/20">
+                    <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/0cf5f4419819437e9f7624f6fcfc5eee~tplv-a9rns2rl98-image.image?rk3s=8e244e95&amp;rrcfp=2609e108&amp;x-expires=1751289940&amp;x-signature=MzDJBQBt%2B6LuntQzyg%2FnHH7vWeQ%3D" alt="Tour map showing upcoming concert locations" class="w-full h-auto rounded">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Behind The Scenes Section -->
+    <section id="behind" class="py-24 relative bg-dark overflow-hidden">
+        <!-- Background elements -->
+        <div class="absolute -top-20 -left-20 w-64 h-64 bg-primary/20 rounded-full filter blur-3xl"></div>
+        <div class="absolute -bottom-40 -right-20 w-80 h-80 bg-secondary/20 rounded-full filter blur-3xl"></div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <h2 class="text-[clamp(2rem,5vw,3.5rem)] font-bebas mb-12 text-center text-primary text-shadow">
+                Behind The Scenes
+            </h2>
+            
+            <p class="text-light/80 max-w-3xl mx-auto text-center mb-16">
+                Get a glimpse into the creative process behind my music. From songwriting sessions to studio recordings, these are the stories and moments that shape my art.
+            </p>
+            
+            <!-- Content Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Item 1 -->
+                <div class="bg-neutral/20 rounded-lg overflow-hidden hover-scale">
+                    <div class="relative">
+                        <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/dd43c1b1cd2d4efc84894f0dd66d3d23~tplv-a9rns2rl98-image.image?rk3s=8e244e95&amp;rrcfp=2609e108&amp;x-expires=1751289890&amp;x-signature=tWUaIjCuHdouNE09MbJwWypeFfY%3D" alt="Recording studio setup with vintage equipment" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 left-4 bg-primary text-dark text-sm font-bold px-3 py-1 rounded-full">
+                            Studio
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2 text-primary">Vintage Equipment Recording</h3>
+                        <p class="text-light/70 mb-4">
+                            Exploring the unique sound of analog synths and tape machines while recording the new album.
+                        </p>
+                        <a href="#" class="text-secondary hover:text-primary transition-colors duration-300 inline-flex items-center">
+                            Read More <i class="fa fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Item 2 -->
+                <div class="bg-neutral/20 rounded-lg overflow-hidden hover-scale">
+                    <div class="relative">
+                        <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/71db5eeb63094665abc6a00e3addf418~tplv-a9rns2rl98-image.image?rk3s=8e244e95&amp;rrcfp=2609e108&amp;x-expires=1751289825&amp;x-signature=49lPtF7KKxoUaF5X2x%2BdDCg%2FrbE%3D" alt="Handwritten lyrics on notebook paper" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 left-4 bg-secondary text-dark text-sm font-bold px-3 py-1 rounded-full">
+                            Songwriting
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2 text-primary">The Lyrics Behind Neon Dreams</h3>
+                        <p class="text-light/70 mb-4">
+                            A deep dive into the inspiration and meaning behind the songs on my latest album.
+                        </p>
+                        <a href="#" class="text-secondary hover:text-primary transition-colors duration-300 inline-flex items-center">
+                            Read More <i class="fa fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Item 3 -->
+                <div class="bg-neutral/20 rounded-lg overflow-hidden hover-scale">
+                    <div class="relative">
+                        <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/f4b020d3fafa4f4ea879fb63008df177~tplv-a9rns2rl98-image.image?rk3s=8e244e95&amp;rrcfp=2609e108&amp;x-expires=1751289855&amp;x-signature=X53gSoam%2B3FB%2FXJYQm2szKXE9wE%3D" alt="Artist performing on stage under colorful lights" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 left-4 bg-primary text-dark text-sm font-bold px-3 py-1 rounded-full">
+                            Live Performance
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2 text-primary">Creating the Stage Show</h3>
+                        <p class="text-light/70 mb-4">
+                            How I design the visual elements and lighting for my live performances.
+                        </p>
+                        <a href="#" class="text-secondary hover:text-primary transition-colors duration-300 inline-flex items-center">
+                            Read More <i class="fa fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Item 4 -->
+                <div class="bg-neutral/20 rounded-lg overflow-hidden hover-scale">
+                    <div class="relative">
+                        <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/9bc3b3b284644f1db2fa454b8b09a12b~tplv-a9rns2rl98-image.image?rk3s=8e244e95&amp;rrcfp=2609e108&amp;x-expires=1751289797&amp;x-signature=RP42zOZvYJ4LtkeHc%2BMrSzKp1lM%3D" alt="Close-up of mixing console with audio levels" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 left-4 bg-secondary text-dark text-sm font-bold px-3 py-1 rounded-full">
+                            Production
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2 text-primary">Mixing Techniques</h3>
+                        <p class="text-light/70 mb-4">
+                            My approach to balancing sounds and creating depth in the production process.
+                        </p>
+                        <a href="#" class="text-secondary hover:text-primary transition-colors duration-300 inline-flex items-center">
+                            Read More <i class="fa fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Item 5 -->
+                <div class="bg-neutral/20 rounded-lg overflow-hidden hover-scale">
+                    <div class="relative">
+                        <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/f21b2f6e53ce41dcbaaf824bad894dc3~tplv-a9rns2rl98-image.image?rk3s=8e244e95&amp;rrcfp=2609e108&amp;x-expires=1751289753&amp;x-signature=CHPid1mRaHu24Dt3SMVoz07EVuY%3D" alt="Artist sketching album cover design" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 left-4 bg-primary text-dark text-sm font-bold px-3 py-1 rounded-full">
+                            Artwork
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2 text-primary">Album Cover Design Process</h3>
+                        <p class="text-light/70 mb-4">
+                            From concept sketches to final artwork, see how the visual identity of my albums is created.
+                        </p>
+                        <a href="#" class="text-secondary hover:text-primary transition-colors duration-300 inline-flex items-center">
+                            Read More <i class="fa fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Item 6 -->
+                <div class="bg-neutral/20 rounded-lg overflow-hidden hover-scale">
+                    <div class="relative">
+                        <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/65983ffad33b4f298cc99bb31a0dd8af~tplv-a9rns2rl98-image.image?rk3s=8e244e95&amp;rrcfp=2609e108&amp;x-expires=1751289685&amp;x-signature=hciN4Yx0cg5VYgroTY4Tc1VQ7to%3D" alt="Band members collaborating in rehearsal space" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 left-4 bg-secondary text-dark text-sm font-bold px-3 py-1 rounded-full">
+                            Collaboration
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2 text-primary">Working with Session Musicians</h3>
+                        <p class="text-light/70 mb-4">
+                            How I collaborate with other artists and musicians to bring my songs to life.
+                        </p>
+                        <a href="#" class="text-secondary hover:text-primary transition-colors duration-300 inline-flex items-center">
+                            Read More <i class="fa fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Store Section -->
+    <section id="store" class="py-24 relative bg-gradient-to-b from-neutral to-dark">
+        <div class="container mx-auto px-4">
+            <h2 class="text-[clamp(2rem,5vw,3.5rem)] font-bebas mb-12 text-center text-secondary text-shadow">
+                Merchandise
+            </h2>
+            
+            <p class="text-light/80 max-w-3xl mx-auto text-center mb-16">
+                Support the music and grab some exclusive merchandise. All proceeds go directly to funding new projects and tours.
+            </p>
+            
+            <!-- Products Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Product 1 -->
+                <div class="bg-dark rounded-lg overflow-hidden hover-scale border border-neutral-light/20">
+                    <div class="relative">
+                        <img src="https://picsum.photos/id/1071/600/600" alt="Neon Dreams album vinyl record" class="w-full aspect-square object-cover">
+                        <div class="absolute top-4 right-4 bg-primary text-dark text-sm font-bold px-3 py-1 rounded-full">
+                            Limited
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-xl font-bebas mb-1 text-primary">Neon Dreams Vinyl</h3>
+                        <p class="text-neutral-light mb-3">$35.00</p>
+                        <p class="text-light/70 mb-4 text-sm">
+                            Limited edition colored vinyl with exclusive artwork and bonus tracks.
+                        </p>
+                        <button class="w-full py-2 bg-primary text-dark font-bold rounded-lg hover:bg-primary/80 transition-all duration-300 neon-border">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Product 2 -->
+                <div class="bg-dark rounded-lg overflow-hidden hover-scale border border-neutral-light/20">
+                    <div class="relative">
+                        <img src="https://picsum.photos/id/1073/600/600" alt="Band t-shirt design" class="w-full aspect-square object-cover">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-xl font-bebas mb-1 text-primary">Neon Dreams Tour Tee</h3>
+                        <p class="text-neutral-light mb-3">$25.00</p>
+                        <p class="text-light/70 mb-4 text-sm">
+                            100% cotton premium t-shirt with tour artwork print.
+                        </p>
+                        <button class="w-full py-2 bg-primary text-dark font-bold rounded-lg hover:bg-primary/80 transition-all duration-300 neon-border">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Product 3 -->
+                <div class="bg-dark rounded-lg overflow-hidden hover-scale border border-neutral-light/20">
+                    <div class="relative">
+                        <img src="https://picsum.photos/id/1074/600/600" alt="Band hoodie design" class="w-full aspect-square object-cover">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-xl font-bebas mb-1 text-primary">Midnight Echoes Hoodie</h3>
+                        <p class="text-neutral-light mb-3">$45.00</p>
+                        <p class="text-light/70 mb-4 text-sm">
+                            Heavyweight fleece hoodie with album artwork on front and back.
+                        </p>
+                        <button class="w-full py-2 bg-primary text-dark font-bold rounded-lg hover:bg-primary/80 transition-all duration-300 neon-border">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Product 4 -->
+                <div class="bg-dark rounded-lg overflow-hidden hover-scale border border-neutral-light/20">
+                    <div class="relative">
+                        <img src="https://picsum.photos/id/1076/600/600" alt="Music cassette tape design" class="w-full aspect-square object-cover">
+                        <div class="absolute top-4 right-4 bg-secondary text-dark text-sm font-bold px-3 py-1 rounded-full">
+                            Vintage
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-xl font-bebas mb-1 text-primary">Synthetic Soul Cassette</h3>
+                        <p class="text-neutral-light mb-3">$20.00</p>
+                        <p class="text-light/70 mb-4 text-sm">
+                            Reissue of the debut album on limited edition cassette tape.
+                        </p>
+                        <button class="w-full py-2 bg-primary text-dark font-bold rounded-lg hover:bg-primary/80 transition-all duration-300 neon-border">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bundle Offer -->
+            <div class="mt-16 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-lg p-8 border border-primary/30">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div>
+                        <h3 class="text-2xl font-bebas mb-2 text-primary">Neon Dreams Bundle</h3>
+                        <p class="text-light/90 mb-4">
+                            Get the vinyl, t-shirt, and exclusive poster for one discounted price. Limited to 100 bundles.
+                        </p>
+                        <div class="flex items-center mb-6">
+                            <span class="text-3xl font-bold text-secondary mr-4">$65.00</span>
+                            <span class="text-neutral-light line-through">$85.00</span>
+                        </div>
+                        <button class="px-8 py-3 bg-primary text-dark font-bold rounded-full hover:bg-primary/80 transition-all duration-300 neon-border">
+                            Buy Bundle
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2">
+                        <img src="https://picsum.photos/id/1071/300/300" alt="Neon Dreams vinyl record" class="rounded-lg">
+                        <img src="https://picsum.photos/id/1073/300/300" alt="Neon Dreams tour t-shirt" class="rounded-lg">
+                        <img src="https://picsum.photos/id/1074/300/300" alt="Exclusive tour poster" class="rounded-lg">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 relative bg-dark tape-texture">
+        <div class="container mx-auto px-4">
+            <h2 class="text-[clamp(2rem,5vw,3.5rem)] font-bebas mb-12 text-center text-primary text-shadow">
+                Get In Touch
+            </h2>
+            
+            <div class="max-w-6xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- Contact Form -->
+                    <div class="bg-neutral/20 backdrop-blur-md rounded-lg p-8 border border-neutral-light/20">
+                        <h3 class="text-2xl font-bebas mb-6 text-secondary">Send a Message</h3>
+                        <form>
+                            <div class="mb-6">
+                                <label for="name" class="block text-light/80 mb-2">Name</label>
+                                <input type="text" id="name" class="w-full bg-dark border border-neutral-light/30 rounded-lg px-4 py-3 text-light focus:outline-none focus:border-primary transition-colors duration-300">
+                            </div>
+                            <div class="mb-6">
+                                <label for="email" class="block text-light/80 mb-2">Email</label>
+                                <input type="email" id="email" class="w-full bg-dark border border-neutral-light/30 rounded-lg px-4 py-3 text-light focus:outline-none focus:border-primary transition-colors duration-300">
+                            </div>
+                            <div class="mb-6">
+                                <label for="subject" class="block text-light/80 mb-2">Subject</label>
+                                <select id="subject" class="w-full bg-dark border border-neutral-light/30 rounded-lg px-4 py-3 text-light focus:outline-none focus:border-primary transition-colors duration-300">
+                                    <option value="">Select a subject</option>
+                                    <option value="booking">Booking Inquiry</option>
+                                    <option value="collaboration">Collaboration Proposal</option>
+                                    <option value="fanmail">Fan Mail</option>
+                                    <option value="press">Press Inquiry</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="mb-6">
+                                <label for="message" class="block text-light/80 mb-2">Message</label>
+                                <textarea id="message" rows="5" class="w-full bg-dark border border-neutral-light/30 rounded-lg px-4 py-3 text-light focus:outline-none focus:border-primary transition-colors duration-300"></textarea>
+                            </div>
+                            <button type="submit" class="w-full py-3 bg-primary text-dark font-bold rounded-lg hover:bg-primary/80 transition-all duration-300 neon-border">
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <!-- Contact Info -->
+                    <div>
+                        <h3 class="text-2xl font-bebas mb-6 text-secondary">Connect With Me</h3>
+                        
+                        <!-- Social Links -->
+                        <div class="mb-10">
+                            <h4 class="text-xl font-semibold mb-4 text-primary">Follow Me</h4>
+                            <div class="flex flex-wrap gap-4">
+                                <a href="#" class="w-12 h-12 rounded-full bg-neutral flex items-center justify-center text-light hover:bg-primary hover:text-dark transition-colors duration-300">
+                                    <i class="fa fa-instagram"></i>
+                                </a>
+                                <a href="#" class="w-12 h-12 rounded-full bg-neutral flex items-center justify-center text-light hover:bg-primary hover:text-dark transition-colors duration-300">
+                                    <i class="fa fa-twitter"></i>
+                                </a>
+                                <a href="#" class="w-12 h-12 rounded-full bg-neutral flex items-center justify-center text-light hover:bg-primary hover:text-dark transition-colors duration-300">
+                                    <i class="fa fa-facebook"></i>
+                                </a>
+                                <a href="#" class="w-12 h-12 rounded-full bg-neutral flex items-center justify-center text-light hover:bg-primary hover:text-dark transition-colors duration-300">
+                                    <i class="fa fa-youtube-play"></i>
+                                </a>
+                                <a href="#" class="w-12 h-12 rounded-full bg-neutral flex items-center justify-center text-light hover:bg-primary hover:text-dark transition-colors duration-300">
+                                    <i class="fa fa-spotify"></i>
+                                </a>
+                                <a href="#" class="w-12 h-12 rounded-full bg-neutral flex items-center justify-center text-light hover:bg-primary hover:text-dark transition-colors duration-300">
+                                    <i class="fa fa-soundcloud"></i>
+                                </a>
+                                <a href="#" class="w-12 h-12 rounded-full bg-neutral flex items-center justify-center text-light hover:bg-primary hover:text-dark transition-colors duration-300">
+                                    <i class="fa fa-tiktok"></i>
+                                </a>
+                                <a href="#" class="w-12 h-12 rounded-full bg-neutral flex items-center justify-center text-light hover:bg-primary hover:text-dark transition-colors duration-300">
+                                    <i class="fa fa-pinterest"></i>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Newsletter -->
+                        <div class="bg-neutral/20 backdrop-blur-md rounded-lg p-6 border border-neutral-light/20 mb-10">
+                            <h4 class="text-xl font-semibold mb-4 text-primary">Join the Mailing List</h4>
+                            <p class="text-light/70 mb-4">
+                                Stay updated with new music, tour dates, and exclusive content.
+                            </p>
+                            <form class="flex">
+                                <input type="email" placeholder="Your email address" class="flex-1 bg-dark border border-neutral-light/30 rounded-l-lg px-4 py-3 text-light focus:outline-none focus:border-primary transition-colors duration-300">
+                                <button type="submit" class="bg-primary text-dark font-bold px-6 rounded-r-lg hover:bg-primary/80 transition-all duration-300">
+                                    Subscribe
+                                </button>
+                            </form>
+                        </div>
+                        
+                        <!-- Management Info -->
+                        <div>
+                            <h4 class="text-xl font-semibold mb-4 text-primary">Management</h4>
+                            <p class="text-light/80 mb-2">
+                                <span class="text-secondary font-medium">Email:</span> 
+                                <a href="mailto:management@voidecho.com" class="hover:text-primary transition-colors duration-300">management@voidecho.com</a>
+                            </p>
+                            <p class="text-light/80 mb-2">
+                                <span class="text-secondary font-medium">Phone:</span> 
+                                <a href="tel:+12125551234" class="hover:text-primary transition-colors duration-300">+1 (212) 555-1234</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 bg-neutral border-t border-neutral-light/20">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <h3 class="text-2xl font-bebas mb-4 text-primary">VOID ECHO</h3>
+                    <p class="text-light/70 mb-6">
+                        Independent musician and producer creating experimental electronic music with emotional depth.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-light/70 hover:text-primary transition-colors duration-300">
+                            <i class="fa fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-light/70 hover:text-primary transition-colors duration-300">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-light/70 hover:text-primary transition-colors duration-300">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                        <a href="#" class="text-light/70 hover:text-primary transition-colors duration-300">
+                            <i class="fa fa-youtube-play"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-secondary">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-light/70 hover:text-primary transition-colors duration-300">Home</a></li>
+                        <li><a href="#music" class="text-light/70 hover:text-primary transition-colors duration-300">Music</a></li>
+                        <li><a href="#shows" class="text-light/70 hover:text-primary transition-colors duration-300">Shows</a></li>
+                        <li><a href="#behind" class="text-light/70 hover:text-primary transition-colors duration-300">Behind The Scenes</a></li>
+                        <li><a href="#store" class="text-light/70 hover:text-primary transition-colors duration-300">Merchandise</a></li>
+                        <li><a href="#contact" class="text-light/70 hover:text-primary transition-colors duration-300">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-secondary">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-light/70 hover:text-primary transition-colors duration-300">Press Kit</a></li>
+                        <li><a href="#" class="text-light/70 hover:text-primary transition-colors duration-300">Privacy Policy</a></li>
+                        <li><a href="#" class="text-light/70 hover:text-primary transition-colors duration-300">Terms of Service</a></li>
+                        <li><a href="#" class="text-light/70 hover:text-primary transition-colors duration-300">Cookie Policy</a></li>
+                        <li><a href="#" class="text-light/70 hover:text-primary transition-colors duration-300">FAQs</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-secondary">Newsletter</h4>
+                    <p class="text-light/70 mb-4">
+                        Subscribe to get updates on new releases, tour dates, and exclusive content.
+                    </p>
+                    <form class="flex">
+                        <input type="email" placeholder="Your email" class="flex-1 bg-dark border border-neutral-light/30 rounded-l-lg px-3 py-2 text-light focus:outline-none focus:border-primary transition-colors duration-300">
+                        <button type="submit" class="bg-primary text-dark px-4 rounded-r-lg hover:bg-primary/80 transition-all duration-300">
+                            <i class="fa fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="pt-8 border-t border-neutral-light/20 text-center text-light/50 text-sm">
+                <p>© 2025 Void Echo. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            menuToggle.innerHTML = mobileMenu.classList.contains('hidden') 
+                ? '<i class="fa fa-bars"></i>' 
+                : '<i class="fa fa-times"></i>';
+        });
+        
+        // Navbar scroll effect
+        const navbar = document.getElementById('main-nav');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-dark/95', 'shadow-lg');
+                navbar.classList.remove('bg-dark/80');
+            } else {
+                navbar.classList.remove('bg-dark/95', 'shadow-lg');
+                navbar.classList.add('bg-dark/80');
+            }
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                        menuToggle.innerHTML = '<i class="fa fa-bars"></i>';
+                    }
+                }
+            });
+        });
+        
+        // Audio player functionality
+        const playButtons = document.querySelectorAll('.fa-play');
+        
+        playButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // This would be connected to actual audio playback
+                // For demo purposes, we'll just toggle the icon
+                const parent = this.closest('button, .flex');
+                if (this.classList.contains('fa-play')) {
+                    this.classList.remove('fa-play');
+                    this.classList.add('fa-pause');
+                    
+                    // Show visual feedback
+                    if (parent) {
+                        parent.classList.add('ring-2', 'ring-primary');
+                    }
+                } else {
+                    this.classList.remove('fa-pause');
+                    this.classList.add('fa-play');
+                    
+                    // Remove visual feedback
+                    if (parent) {
+                        parent.classList.remove('ring-2', 'ring-primary');
+                    }
+                }
+            });
+        });
+    </script>
+
+
+    </body></html>
